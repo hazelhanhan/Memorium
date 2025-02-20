@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scene Exploration</title>
+  <style>
+    /* 全局样式 */
+    @font-face {
+      font-family: 'MyCustomFont';
+      src: url('./assets/fonts/AnonymousPro-Regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    body, html {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-image: url('./assets/images/background16.png'); /* 单一背景 */
+      background-size: cover;
+      background-position: center;
+      font-family: 'MyCustomFont', 'Microsoft YaHei', sans-serif;
+      overflow: hidden;
+    }
+
+    .scene {
+      position: relative;
+      width: 844px;
+      height: 390px;
+      background-image: url('./assets/images/scene-background.png'); /* 替换为你的背景图片路径 */
+      background-size: cover;
+      background-position: center;
+    }
+
+    .close-button,
+    .refresh-button {
+      position: absolute;
+      top: 10px;
+      cursor: pointer;
+      z-index: 2;
+      transition: transform 1s, filter 1s; /* 添加过渡效果 */
+    }
+
+    .close-button {
+      left: 10px;
+    }
+
+    .refresh-button {
+      left: 60px;
+    }
+    .close-button:active,
+    .refresh-button:active {
+      transform: scale(1.3); /* 略微变大 */
+      filter: brightness(0.8); /* 颜色变深 */
+    }
+
+    .interaction-point {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      background-image: url('./assets/images/interaction-point.png'); /* 替换为你的背景图片路径 */
+      background-size: cover;
+      background-position: center;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .interaction-point:hover {
+      transform: scale(1.2);
+    }
+
+    /* 调整交互点位置以匹配图片 */
+    .interaction-point[data-id="1"] {
+      top: 20%;
+      left: 70%;
+    }
+
+    .interaction-point[data-id="2"] {
+      top: 50%;
+      left: 30%;
+    }
+
+    .interaction-point[data-id="3"] {
+      top: 75%;
+      left: 60%;
+    }
+
+    .info-box {
+      position: absolute;
+      background-image: url('./assets/images/info-box.png'); /* 替换为你的背景图片路径 */
+      background-size: cover;
+      background-position: center;
+      padding: 70px;
+      border-radius: 0px;
+      font-size: 14px;
+      max-width: 1000px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+    }
+
+    .info-box.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    /* 调整信息框位置以匹配交互点 */
+    .info-box[data-id="1"] {
+      top: 10%;
+      left: 75%;
+    }
+
+    .info-box[data-id="2"] {
+      top: 33%;
+      left: 35%;
+    }
+
+    .info-box[data-id="3"] {
+      top: 57%;
+      left: 65%;
+    }
+
+     /* 波纹效果 */
+     .ripple {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 50%;
+      transform: scale(0);
+      animation: ripple-animation 0.6s linear;
+      pointer-events: none;
+    }
+
+    @keyframes ripple-animation {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 添加视频元素 -->
+  <video id="intro-video" autoplay muted style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;">
+    <source src="./assets/images/Flip.mp4" type="video/mp4">
+    您的浏览器不支持视频标签。
+  </video>
+
+  <!-- 其他元素 -->
+  <div id="content" style="opacity: 1; transition: opacity 1s;">
+    <!-- 关闭按钮 -->
+    <div class="close-button" onclick="setTimeout(() => window.location.href='index1.html', 500);">
+        <img src="./assets/images/cancel.png" alt="Close">
+    </div>
+
+    <!-- 刷新按钮 -->
+    <div class="refresh-button" onclick="setTimeout(() => window.history.back(), 500);">
+        <img src="./assets/images/return.png" alt="Refresh">
+    </div>
+
+    <div class="scene">
+      <!-- 交互点 -->
+      <div class="interaction-point" data-id="1"></div>
+      <div class="interaction-point" data-id="2"></div>
+      <div class="interaction-point" data-id="3"></div>
+
+      <!-- 信息框 -->
+      <div class="info-box" data-id="1"></div>
+      <div class="info-box" data-id="2"></div>
+      <div class="info-box" data-id="3"></div>
+    </div>
+  </div>
+
+  <script>
+    // 页面加载时检查标记
+    window.onload = function() {
+      const fromChooseScene = sessionStorage.getItem('fromChooseScene');
+      const video = document.getElementById('intro-video');
+      const content = document.getElementById('content');
+
+      if (fromChooseScene) {
+        // 播放视频
+        video.style.display = 'block'; // 确保视频可见
+        content.style.opacity = '0'; // 隐藏其他内容
+
+        // 播放完视频后隐藏视频元素并淡入其他元素
+        video.addEventListener('ended', () => {
+          video.style.display = 'none'; // 隐藏视频
+          content.style.opacity = '1'; // 淡入其他元素
+        });
+      } else {
+        // 如果不是从 choose scene 跳转，直接显示内容
+        video.style.display = 'none'; // 隐藏视频
+        content.style.opacity = '1'; // 显示内容
+      }
+
+      // 动画结束后移除标记
+      sessionStorage.removeItem('fromChooseScene');
+    };
+
+    // 添加波纹效果的函数
+    function createRipple(event) {
+      const button = event.currentTarget;
+      const ripple = document.createElement('span');
+      ripple.classList.add('ripple');
+
+      // 计算波纹位置
+      const rect = button.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      ripple.style.width = ripple.style.height = `${size}px`;
+      ripple.style.left = `${event.clientX - rect.left - size / 2}px`;
+      ripple.style.top = `${event.clientY - rect.top - size / 2}px`;
+
+      // 添加到按钮内
+      button.appendChild(ripple);
+
+      // 动画结束后移除波纹
+      ripple.addEventListener('animationend', () => ripple.remove());
+    }
+
+    // 为按钮绑定波纹效果
+    document.querySelectorAll('.interaction-point, .close-button, .refresh-button').forEach(button => {
+      button.addEventListener('click', createRipple);
+    });
+
+    // 动态添加动画效果
+    // 为每个按钮绑定点击事件
+    document.querySelectorAll('.interaction-point').forEach(button => {
+      button.addEventListener('click', function () {
+        this.classList.toggle('expanded'); // 切换类名
+      });
+    });
+
+    const points = document.querySelectorAll('.interaction-point');
+    const infoBoxes = document.querySelectorAll('.info-box');
+
+    points.forEach(point => {
+      point.addEventListener('click', () => {
+        const id = point.getAttribute('data-id');
+
+        // Toggle visibility of the info box
+        infoBoxes.forEach(box => {
+          if (box.getAttribute('data-id') === id) {
+            box.classList.toggle('visible');
+          } else {
+            box.classList.remove('visible');
+          }
+        });
+      });
+    });
+
+    // 为每个信息框绑定点击事件
+    infoBoxes.forEach(box => {
+      box.addEventListener('click', function () {
+        const id = this.getAttribute('data-id');
+        // 跳转到 scene2.html
+        setTimeout(() => {
+          window.location.href = 'scene2.html'; 
+        }, 500); // 0.5秒后跳转
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Import Memories</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    @font-face {
+        font-family: 'MyCustomFont'; /* 自定义的字体名称 */
+        src: url('./assets/fonts/InriaSans-Light.ttf') format('truetype'); /* 修正字体格式 */
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    /* 全局样式 */
+    body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        background: url('./assets/images/background3.png') no-repeat center center fixed;
+        background-size: cover;
+        font-family: 'MyCustomFont', 'Microsoft YaHei', sans-serif; /* 字体优先级 */
+
+    }
+
+    /* 顶部返回按钮和标题 */
+    .header {
+      background-color: #3a73b0;
+      color: white;
+      display: flex;
+      align-items: center;
+      padding: 10px;
+    }
+
+    .header .back-button {
+      color: white;
+      font-size: 20px;
+      text-decoration: none;
+      margin-right: 10px;
+    }
+
+    .header h1 {
+      font-size: 18px;
+      margin: 0;
+      position: absolute;
+      left:38%;
+    }
+
+    /* 页面布局 */
+    .container {
+      padding: 20px;
+    }
+
+    .input-title {
+      background-color: #a2a2a292;
+      width: 100%;
+      padding: 10px;
+      color: #ffffff;
+      font-size: 16px;
+      border: none;
+      border-radius: 0px;
+      margin-bottom: 10px;
+    }
+
+    .input-title:focus {
+      background-color: #a2a2a2b2;
+      outline: none;
+    }
+
+    .import-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .import-button {
+      width: 30%;
+      text-align: center;
+      background-color: #79797973;
+      padding: 15px;
+      border-radius: 0px;
+      font-size: 14px;
+      color: #ffffff;
+      cursor: pointer;
+      border: 1px solid #ccc;
+      margin-right: 5px;
+    }
+
+    .import-button:last-child {
+      margin-right: 0;
+    }
+
+    .import-button:hover {
+      background-color: #7c7c7c;
+    }
+
+    .textarea {
+      background-color: #a2a2a292;
+      width: 100%;
+      height: 320px;
+      padding: 10px;
+      color: #ffffff;
+      font-size: 14px;
+      border: none;
+      border-radius: 0px;
+      resize: none;
+      margin-bottom: 10px;
+    }
+
+    .textarea:focus {
+      background-color: #a2a2a2b2;
+      outline: none;
+    }
+
+    .options {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .option {
+      background-color: #aeaeae86;
+      padding: 10px 15px;
+      border-radius: 5px;
+      font-size: 14px;
+      color: #ffffff;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      flex: 1;
+      text-align: center;
+      margin-right: 5px;
+    }
+
+    .option:last-child {
+      margin-right: 0;
+    }
+
+    .option:hover {
+      background-color: #93939369;
+    }
+
+    .privacy {
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .privacy span {
+      font-size: 14px;
+      color: #555;
+    }
+
+    /* 蓝色按钮 */
+    .settings-button1 {
+      position: absolute;
+      bottom: 40px;
+      right: 0px;
+      width: 100%;
+      max-width: 400px;
+      margin: 0;
+      padding: 15px;
+      background: url('./assets/images/buttom3.png') no-repeat center center;
+      color: white;
+      font-size: 18px;
+      font-weight: regular;
+      text-align: center;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+
+    .settings-button1:hover {
+      opacity: 0.9; /* 鼠标悬停时透明度 */
+    }
+
+    .settings-button1:active {
+      opacity: 0.7; /* 鼠标按下时按钮变暗 */
+      transform: scale(0.98); /* 添加轻微的按压效果 */
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 顶部标题栏 -->
+  <div class="header">
+    <a href="#" class="back-button" onclick="window.history.back()">&larr; Back</a>
+    <h1>Import Memories</h1>
+  </div>
+
+  <!-- 页面内容 -->
+  <div class="container">
+    <!-- 标题输入框 -->
+    <input type="text" class="input-title" placeholder="Add a title...">
+
+    <!-- 导入按钮 -->
+    <div class="import-buttons">
+      <div class="import-button">
+        <img src="./assets/images/photo.png">
+      </div>
+      <div class="import-button">
+        <img src="./assets/images/video.png">
+      </div>
+      <div class="import-button">
+        <img src="./assets/images/audio.png">
+      </div>
+    </div>
+
+    <!-- 文本输入框 -->
+    <textarea class="textarea" placeholder="Add text..."></textarea>
+
+    <!-- 时间、地点、人物选项 -->
+    <div class="options">
+      <div class="option">Time</div>
+      <div class="option">Place</div>
+      <div class="option">Person</div>
+    </div>
+
+    <!-- 隐私设置 -->
+    <div class="privacy">
+        <img src="./assets/images/privacy.png">
+    </div>
+
+    <div class="settings-button1" onclick="window.location.href='View Memories.html'">Post</div>
+
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings Page</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <style>
+    @font-face {
+        font-family: 'MyCustomFont'; /* 自定义的字体名称 */
+        src: url('./assets/fonts/InriaSans-Light.ttf') format('truetype'); /* 修正字体格式 */
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    /* 全局样式 */
+    body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        background: url('./assets/images/background3.png') no-repeat center center fixed;
+        background-size: cover;
+        font-family: 'MyCustomFont', 'Microsoft YaHei', sans-serif; /* 字体优先级 */
+
+    }
+
+    /* 顶部返回按钮和标题 */
+    .header {
+      background-color: #3a73b0;
+      color: white;
+      display: flex;
+      align-items: center;
+      padding: 10px;
+    }
+
+    .header .back-button {
+      color: white;
+      font-size: 20px;
+      text-decoration: none;
+      margin-right: 10px;
+    }
+
+    .header h1 {
+      font-size: 18px;
+      margin: 0;
+      flex-grow: 1;
+      position: absolute;
+      left:38%;
+    }
+
+    .header .search-icon {
+      margin-left: auto;
+      font-size: 15px;
+      color: white;
+      text-decoration: none;
+    }
+
+    /* Tabs 样式 */
+    .tabs {
+      display: flex;
+      justify-content: space-around;
+      background-color: #e7e7e7;
+      padding: 10px 0;
+    }
+
+    .tab {
+      flex: 1;
+      text-align: center;
+      font-size: 14px;
+      font-weight: bold;
+      color: #555;
+    }
+
+    .tab.active {
+      color: #296eb7;
+      border-bottom: 2px solid #17599f;
+    }
+
+    /* Timeline 样式 */
+    .timeline {
+      padding: 10px;
+      left:50%;
+      text-align: center;
+    }
+
+    .timeline-date {
+      font-size: 14px;
+      font-weight: bold;
+      color: #555;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 顶部标题栏 -->
+  <div class="header">
+    <a href="#" class="back-button" onclick="window.history.back()">&larr; Back</a>
+    <h1>View Memories</h1>
+    <!-- <a href="#" class="search-icon">
+        <img src="./assets/images/icon10.png">
+    </a> -->
+  </div>
+
+  <!-- 标签导航 -->
+  <div class="tabs">
+    <div class="tab active" onclick="setActiveTab(this)">Timeline</div>
+    <div class="tab" onclick="setActiveTab(this)">Place</div>
+    <div class="tab" onclick="setActiveTab(this)">Person</div>
+  </div>
+
+  <script>
+    function setActiveTab(tab) {
+      // 移除所有标签的 active 类
+      const tabs = document.querySelectorAll('.tab');
+      tabs.forEach(t => t.classList.remove('active'));
+      // 为当前点击的标签添加 active 类
+      tab.classList.add('active');
+    }
+  </script>
+
+  <!-- 时间轴内容 -->
+  <div class="timeline">
+    <!-- 时间点 1 -->
+    <div class="timeline-date">
+        <img src="./assets/images/memory1.png">
+    </div>
+
+    <!-- 时间点 2 -->
+    <div class="timeline-date">
+        <img src="./assets/images/memory2.png">
+    </div>
+
+    <!-- 时间点 3 -->
+    <div class="timeline-date">
+        <img src="./assets/images/memory3.png">
+    </div>
+  </div>
+
+</body>
+</html>

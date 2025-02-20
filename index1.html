@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings Page</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <style>
+    @font-face {
+        font-family: 'MyCustomFont'; /* 自定义的字体名称 */
+        src: url('./assets/fonts/InriaSans-Light.ttf') format('truetype'); /* 修正字体格式 */
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    /* 全局样式 */
+    body, html {
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        background: url('./assets/images/background3.png') no-repeat center center fixed;
+        background-size: cover;
+        background-attachment: fixed;
+        font-family: 'MyCustomFont', 'Microsoft YaHei', sans-serif;
+    }
+
+
+    /* 页面容器 */
+    .settings-container {
+      padding-top: 30px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .search-container {
+        display: flex;
+        align-items: center;
+        background-color: rgba(255, 255, 255, 0.7);
+        margin: 10px;
+        transition: all 0.3s ease;
+        height: 40px;
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-container:hover {
+        background-color: rgba(255, 255, 255, 0.8);
+        transform: scale(1.01);
+    }
+
+    .search-container:focus-within {
+        background-color: rgba(255, 255, 255, 0.9);
+        transform: scale(1.02);
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+    }
+
+
+    .search-container input[type="text"] {
+        width: calc(100% - 40px); /* 减去图标宽度 */
+        height: 100%;
+        padding: 10px;
+        border: none;
+        outline: none; /* 移除输入框点击时的轮廓 */
+        font-size: 16px;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr); /* 2列布局 */
+      gap: 10px; /* 方块之间的间距 */
+      padding: 20px;
+    }
+
+    .grid-item {
+      width: 158px; /* 方块的宽度 */
+      height: 204px; /* 方块的高度 */
+      background-size: cover; /* 背景图片覆盖整个方块 */
+      background-position: center; /* 背景图片居中 */
+      border-radius: 0px; /* 方块的圆角 */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      transition: all 1s ease; /* 添加过渡效果 */
+    }
+
+    .offset:nth-child(2n){
+      margin-top:20px
+    }
+
+    .grid-item:hover {
+        opacity: 0.9;
+        transform: scale(1.02); /* 减小放大比例 */
+    }
+    .grid-item:active {
+        opacity: 0.7;
+        transform: scale(1.03); /* 轻微增加按压时的放大效果 */
+    }
+
+
+    .none{
+        background-color: rgba(255, 255, 255, 0);
+            height: 600px;
+            padding: 20px;
+            text-align: center;
+    }
+
+
+
+    /* 底部导航栏 */
+    .bottom-navbar {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      height: 10%;
+      background-color: rgba(231, 231, 231, 0.9);
+      box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.2);
+      z-index: 2;
+    }
+
+    .bottom-navbar .nav-link {
+      color: #888;
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .bottom-navbar .nav-link.active {
+      color: #0056b3;
+      font-weight: bold;
+    }
+
+    .nav-icon {
+      font-size: 20px;
+      margin-bottom: 3px;
+      width:40px ;
+      height:40px;
+      transition: filter 0.2s ease, transform 0.1s ease; /* 添加过渡效果 */
+    }
+
+    /* 鼠标悬停时图标变暗 */
+    .nav-icon:hover {
+     filter: brightness(85%); /* 亮度降低，使图标颜色加深 */
+     transform: scale(1.05); /* 微微放大图标 */
+    }
+
+    /* 鼠标点击时图标变得更暗 */
+    .nav-icon:active {
+     filter: brightness(70%); /* 进一步降低亮度，增加点击反馈 */
+     transform: scale(0.95); /* 点击时微微缩小图标 */
+    }
+
+
+    /* 小屏幕适配 */
+    @media (max-width: 768px) {
+      .settings-button {
+        font-size: 16px;
+      }
+    }
+
+    /* 添加淡入淡出动画 */
+    .fade {
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+    }
+    .fade.in {
+        opacity: 1;
+    }
+  </style>
+  <!-- FontAwesome CDN for icons -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body class="fade">
+  <script>
+    // 页面加载时添加淡入效果
+    window.onload = function() {
+      document.body.classList.add('in');
+    };
+  </script>
+  <!-- 页面内容 -->
+  <div class="container settings-container text-center">
+    <div class="search-container">
+        <input type="text" placeholder="Search person's name, location, time...">
+    </div>
+  </div>
+
+ <a href="index5.html" onclick="navigateToNextPage(); return false;">
+    <div class="grid-container">
+      <div class="grid-item" style="background-image: url('./assets/images/stranger1.png');"></div>
+      <div class="grid-item offset" style="background-image: url('./assets/images/stranger2.png');"></div>
+      <div class="grid-item" style="background-image: url('./assets/images/stranger3.png');"></div>
+      <div class="grid-item offset" style="background-image: url('./assets/images/stranger4.png');"></div>
+      <div class="grid-item" style="background-image: url('./assets/images/stranger5.png');"></div>
+      <div class="grid-item offset" style="background-image: url('./assets/images/stranger6.png');"></div>
+    </div>
+</a>
+
+<div class="none">
+</div>
+
+<!-- 底部导航栏 -->
+<nav class="bottom-navbar navbar navbar-light">
+  <div class="container-fluid d-flex justify-content-around">
+  <!-- Explore 图标 -->
+  <a href="#" class="nav-link text-center active">
+      <div class="nav-icon">
+      <img src="./assets/images/icon8.png" alt="Explore">
+      </div>
+      Explore
+  </a>
+  <!-- Following 图标 -->
+  <a href="index2.html" class="nav-link text-center">
+      <div class="nav-icon">
+      <img src="./assets/images/icon2.png" alt="Following">
+      </div>
+      Following
+  </a>
+  <!-- Settings 图标 -->
+  <a href="index4.html" class="nav-link text-center">
+      <div class="nav-icon">
+      <img src="./assets/images/icon5.png" alt="Settings">
+      </div>
+      Settings
+  </a>
+  <!-- Me 图标 -->
+  <a href="index3.html" class="nav-link text-center">
+      <div class="nav-icon">
+      <img src="./assets/images/icon4.png" alt="Me">
+      </div>
+      Me
+  </a>
+  </div>
+</nav>
+  
+
+  <!-- Bootstrap Bundle JS -->
+  <script>
+    function navigateToNextPage() {
+      document.body.classList.remove('in');
+      document.body.classList.add('fade');
+      setTimeout(() => {
+        window.location.href = 'index5.html';
+      }, 500);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat</title>
+  <style>
+    @font-face {
+      font-family: 'MyCustomFont';
+      src: url('./assets/fonts/AnonymousPro-Regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    body, html {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-image: url('./assets/images/background15.png');
+      background-size: cover;
+      background-position: center;
+      font-family: 'MyCustomFont', 'Microsoft YaHei', sans-serif;
+      overflow: hidden;
+    }
+
+    .close-button,
+    .refresh-button {
+      position: absolute;
+      top: 10px;
+      cursor: pointer;
+      z-index: 2;
+      transition: transform 1s, filter 1s; /* 添加过渡效果 */
+    }
+
+    .close-button {
+      left: 10px;
+    }
+
+    .refresh-button {
+      left: 60px;
+    }
+
+    .close-button:active,
+    .refresh-button:active {
+      transform: scale(1.3); /* 略微变大 */
+      filter: brightness(0.8); /* 颜色变深 */
+    }
+
+    .chat-wall {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+    }
+
+    .wall-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr); /* 每行 3 个卡片 */
+      grid-auto-rows: 1fr; /* 自动调整每行高度 */
+      gap: 10px;
+      perspective: 1000px;
+      width: 90%; /* 设置宽度以适应屏幕 */
+      height: 70%; /* 只显示 3 行内容 */
+      overflow-y: auto; /* 允许垂直滚动查看第 4 行 */
+      scroll-behavior: smooth; /* 滚动效果平滑 */
+      padding: 30px;
+      background: rgba(255, 255, 255, 0);
+      border: 1px solid rgba(255, 255, 255, 0);
+      border-radius: 8px;
+    }
+
+    .chat-card {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      box-shadow: none;
+      cursor: pointer;
+      transition: transform 0.3s, background 0.3s;
+      transform-origin: center;
+      color: white;
+    }
+
+    /* 给卡片透视变形效果 */
+    .chat-card:nth-child(3n+1) {
+      transform: rotateY(-20deg) translateZ(50px); /* 增加变形角度和位移 */
+    }
+
+    .chat-card:nth-child(3n+2) {
+      transform: rotateY(0deg) translateZ(70px); /* 增加位移 */
+    }
+
+    .chat-card:nth-child(3n+3) {
+      transform: rotateY(20deg) translateZ(50px); /* 增加变形角度和位移 */
+    }
+
+    .chat-card:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.05) translateY(-10px);
+    }
+
+    /* 小屏幕适配优化 */
+    @media (max-width: 390px) {
+      .wall-container {
+        gap: 8px; /* 减小卡片间隙 */
+      }
+
+      .chat-card {
+        font-size: 12px; /* 调整字体大小 */
+        line-height: 1.2;
+      }
+    }
+
+    /* 波纹效果 */
+    .ripple {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 50%;
+      transform: scale(0);
+      animation: ripple-animation 0.6s linear;
+      pointer-events: none;
+    }
+
+    @keyframes ripple-animation {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+  </style>
+  <script>
+    // 跳转到指定页面的延迟函数
+    function delayedRedirect(url) {
+      setTimeout(() => {
+        window.location.href = url;
+      }, 500); // 延迟 1 秒
+    }
+
+  </script>
+</head>
+<body>
+  <!-- 关闭按钮 -->
+  <div class="close-button" onclick="setTimeout(() => window.location.href='index1.html', 500);">
+    <img src="./assets/images/cancel.png" alt="Close">
+  </div>
+
+  <!-- 刷新按钮 -->
+  <div class="refresh-button" onclick="setTimeout(() => window.history.back(), 500);">
+    <img src="./assets/images/return.png" alt="Close">
+  </div>
+
+  <div class="chat-wall">
+    <div class="wall-container">
+      <!-- 矩形卡片内容 -->
+      <div class="chat-card" onclick="delayedRedirect('history.html')">Hazel's favorite paintings and artists</div>
+      <div class="chat-card" onclick="delayedRedirect('history.html')">Summer travel in Italy</div>
+      <div class="chat-card" onclick="delayedRedirect('history.html')">Hazel's first job and company partner</div>
+      <div class="chat-card" onclick="delayedRedirect('history.html')">Advice on relationships</div>
+      <div class="chat-card" onclick="delayedRedirect('history.html')">Discuss the latest movie releases</div>
+      <div class="chat-card" onclick="delayedRedirect('history.html')">Science competitions</div>
+      <div class="chat-card" onclick="delayedRedirect('history.html')">Hazel's experience on the volleyball team</div>
+      <div class="chat-card" onclick="delayedRedirect('history.html')">Today's history</div>
+      <div class="chat-card" onclick="delayedRedirect('history.html')">Annual Summary</div>
+      <div class="chat-card" onclick="delayedRedirect('history.html')">Favorite music</div>
+      <div class="chat-card" onclick="delayedRedirect('history.html')">Favorite books</div>
+      <div class="chat-card" onclick="delayedRedirect('history.html')">Best concerts</div>
+    </div>
+  </div>
+
+  <script>
+    // 添加波纹效果的函数
+    function createRipple(event) {
+      const button = event.currentTarget;
+      const ripple = document.createElement('span');
+      ripple.classList.add('ripple');
+
+      // 计算波纹位置
+      const rect = button.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      ripple.style.width = ripple.style.height = `${size}px`;
+      ripple.style.left = `${event.clientX - rect.left - size / 2}px`;
+      ripple.style.top = `${event.clientY - rect.top - size / 2}px`;
+
+      // 添加到按钮内
+      button.appendChild(ripple);
+
+      // 动画结束后移除波纹
+      ripple.addEventListener('animationend', () => ripple.remove());
+    }
+
+    // 为按钮绑定波纹效果
+    document.querySelectorAll('.chat-options,.close-button, .refresh-button').forEach(button => {
+      button.addEventListener('click', createRipple);
+    });
+
+        // 动态添加动画效果
+    // 为每个按钮绑定点击事件
+    document.querySelectorAll('.chat-options').forEach(button => {
+    button.addEventListener('click', function () {
+        this.classList.toggle('expanded'); // 切换类名
+    });
+    });
+
+  </script>
+</body>
+</html>
+

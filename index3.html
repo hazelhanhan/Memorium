@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings Page</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <style>
+    @font-face {
+        font-family: 'MyCustomFont'; /* 自定义的字体名称 */
+        src: url('./assets/fonts/InriaSans-Light.ttf') format('truetype'); /* 修正字体格式 */
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    /* 全局样式 */
+    body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        background: url('./assets/images/background2.png') no-repeat center center fixed;
+        background-size: cover;
+        font-family: 'MyCustomFont', 'Microsoft YaHei', sans-serif; /* 字体优先级 */
+    }
+
+
+    /* 页面容器 */
+    .settings-container {
+      padding-top: 30px; /* 顶部间距 */
+    }
+
+
+    .main-image-container {
+        transition: all 0.3s ease; /* 添加过渡效果 */
+    }
+
+    .main-image-container:hover {
+        opacity: 0.9;
+        transform: scale(1.02); /* 减小放大比例 */
+    }
+
+    .main-image-container:active {
+        opacity: 0.7;
+        transform: scale(1.03); /* 轻微增加按压时的放大效果 */
+    }
+
+    /* 蓝色按钮 */
+    .settings-button1 {
+      width: 100%;
+      max-width: 400px;
+      margin: 15px auto;
+      padding: 15px;
+      background: url('./assets/images/buttom.png') no-repeat center center;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+
+    .settings-button1:hover {
+      opacity: 0.9; /* 鼠标悬停时透明度 */
+    }
+
+    .settings-button1:active {
+      opacity: 0.7; /* 鼠标按下时按钮变暗 */
+      transform: scale(0.98); /* 添加轻微的按压效果 */
+    }
+
+    .settings-button2 {
+      width: 100%;
+      max-width: 400px;
+      margin: 15px auto;
+      padding: 15px;
+      background: url('./assets/images/buttom2.png') no-repeat center center;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+
+    .settings-button2:hover {
+      opacity: 0.9; /* 鼠标悬停时透明度 */
+    }
+
+    .settings-button2:active {
+      opacity: 0.7; /* 鼠标按下时按钮变暗 */
+      transform: scale(0.98); /* 添加轻微的按压效果 */
+    }
+
+    /* 底部导航栏 */
+    .bottom-navbar {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      height: 10%;
+      background-color: rgba(231, 231, 231, 0.9);
+      box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .bottom-navbar .nav-link {
+      color: #888;
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .bottom-navbar .nav-link.active {
+      color: #0056b3;
+      font-weight: bold;
+    }
+
+    .nav-icon {
+      font-size: 20px;
+      margin-bottom: 3px;
+      width:40px ;
+      height:40px;
+      transition: filter 0.2s ease, transform 0.1s ease; /* 添加过渡效果 */
+    }
+
+    /* 鼠标悬停时图标变暗 */
+    .nav-icon:hover {
+     filter: brightness(85%); /* 亮度降低，使图标颜色加深 */
+     transform: scale(1.05); /* 微微放大图标 */
+    }
+
+    /* 鼠标点击时图标变得更暗 */
+    .nav-icon:active {
+     filter: brightness(70%); /* 进一步降低亮度，增加点击反馈 */
+     transform: scale(0.95); /* 点击时微微缩小图标 */
+    }
+
+
+    /* 小屏幕适配 */
+    @media (max-width: 768px) {
+      .settings-button {
+        font-size: 16px;
+      }
+    }
+  </style>
+  <!-- FontAwesome CDN for icons -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <!-- 页面内容 -->
+  <div class="container settings-container text-center">
+
+
+    <!-- 个人信息矩形框 -->
+    <div class="profile-header">
+      <img src="./assets/images/avatar.png" alt="Profile Photo" class="profile-photo">
+    </div>
+
+    <!-- 中间大图片区域 -->
+    <a href="my memory.html" class="main-image-link">
+      <div class="main-image-container">
+        <img src="./assets/images/main-photo.png" alt="Main Content" class="main-photo">
+      </div>
+    </a>
+    <!-- 蓝色按钮组 -->
+    <div class="settings-button1">Device Connection</div>
+    <div class="settings-button2">Language System</div>
+
+  </div>
+
+<!-- 底部导航栏 -->
+<nav class="bottom-navbar navbar navbar-light">
+  <div class="container-fluid d-flex justify-content-around">
+  <!-- Explore 图标 -->
+  <a href="index1.html" class="nav-link text-center">
+      <div class="nav-icon">
+      <img src="./assets/images/icon1.png" alt="Explore">
+      </div>
+      Explore
+  </a>
+  <!-- Following 图标 -->
+  <a href="index2.html" class="nav-link text-center">
+      <div class="nav-icon">
+      <img src="./assets/images/icon2.png" alt="Following">
+      </div>
+      Following
+  </a>
+  <!-- Settings 图标 -->
+  <a href="index4.html" class="nav-link text-center">
+      <div class="nav-icon">
+      <img src="./assets/images/icon5.png" alt="Settings">
+      </div>
+      Settings
+  </a>
+  <!-- Me 图标 -->
+  <a href="#" class="nav-link text-center active">
+      <div class="nav-icon">
+      <img src="./assets/images/icon6.png" alt="Me">
+      </div>
+      Me
+  </a>
+  </div>
+</nav>
+  
+
+  <!-- Bootstrap Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

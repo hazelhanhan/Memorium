@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Login Page</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <style>
+    @font-face {
+      font-family: 'MyCustomFont'; /* 自定义的字体名称 */
+      src: url('./assets/fonts/InriaSans-Light.ttf') format('truetype'); /* 修正字体格式 */
+      font-weight: normal;
+      font-style: normal;
+    }
+      
+      body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: url('./assets/images/background1.png') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'MyCustomFont', 'Microsoft YaHei', sans-serif; /* 字体优先级 */
+      overflow: hidden; /* 禁止页面滚动 */
+    }
+
+    /* 移除 overlay，因为它不再需要 */
+    .login-container {
+      position: absolute; /* 使容器固定在页面底部 */
+      bottom: 5%; /* 距离页面底部的距离 */
+      left: 50%;
+      transform: translateX(-50%); /* 水平居中 */
+      width: 90%; /* 容器宽度 */
+      max-width: 400px; /* 最大宽度 */
+      height:53%;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0); /* 半透明背景 */
+      border-radius: 10px;
+      color: #ffffff;
+    }
+
+    /* 输入框样式 */
+    .login-container .form-floating input {
+      background: rgba(255, 255, 255, 0.7); /* 半透明输入框背景 */
+      color: #000;
+      border-radius: 0px;
+    }
+
+    .login-container .form-floating label {
+      color: #333;
+    }
+
+
+        /* 蓝色按钮 */
+      .settings-button1 {
+      position: absolute;
+      bottom: 40px;
+      right: 0px;
+      width: 100%;
+      max-width: 400px;
+      margin: 0;
+      padding: 15px;
+      background: url('./assets/images/buttom3.png') no-repeat center center;
+      color: white;
+      font-size: 18px;
+      font-weight: regular;
+      text-align: center;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+
+    .settings-button1:hover {
+      opacity: 0.9; /* 鼠标悬停时透明度 */
+    }
+
+    .settings-button1:active {
+      opacity: 0.7; /* 鼠标按下时按钮变暗 */
+      transform: scale(0.98); /* 添加轻微的按压效果 */
+    }
+
+    /* Checkbox 自定义样式 */
+    .custom-checkbox input {
+      margin-right: 0.5rem;
+    }
+
+    /* Create Account 链接 */
+    .link {
+      color: #3562c1;
+      text-decoration: underline;
+    }
+
+
+    .link:hover {
+      color: darkblue; /* 鼠标悬停时变为深蓝色 */
+    }
+
+    .mt-3{
+        position: absolute;
+        bottom: 10px;
+        left:36%;
+    }
+
+
+    /* 移动端适配 */
+    @media (max-width: 576px) {
+      .login-container {
+        bottom: 3%; /* 移动端距离底部更小 */
+        padding: 1.5rem;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <!-- Background Overlay -->
+  <div class="overlay"></div>
+
+  <!-- Login Form -->
+  <div class="container h-100">
+    <div class="row justify-content-center align-items-center h-100">
+      <div class="col-md-6 col-lg-4">
+        <div class="login-container text-center">
+          <!-- User Icon -->
+          <div class="mb-4">
+            <img src="./assets/images/logo1.png" alt="User Icon" width="100px">
+          </div>
+          <!-- Login Form -->
+          <form id="loginForm" onsubmit="handleLogin(event)">
+            <!-- Account Input -->
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="account" placeholder="Account" required>
+              <label for="account">Account</label>
+            </div>
+
+            <!-- Password Input -->
+            <div class="form-floating mb-3">
+              <input type="password" class="form-control" id="password" placeholder="Password" required>
+              <label for="password">Password</label>
+            </div>
+
+            <!-- Checkbox -->
+            <div class="form-check mb-3 text-start custom-checkbox">
+              <input class="form-check-input" type="checkbox" id="agree" required>
+              <label class="form-check-label" for="agree">
+                I have read and agree to the <a href="#" class="link">Terms of Service</a> and <a href="#" class="link">Privacy Policy</a>.
+              </label>
+            </div>
+
+            <!-- Login Button -->
+            <!-- <button type="submit" class="btn btn-primary login-button">Log In</button>
+           </form> -->
+
+            <div class="settings-button1" onclick="window.location.href='navigation.html'">
+              Log In
+            </div>
+
+            <!-- Create Account -->
+            <div class="mt-3">
+              <a href="#" class="link">Create Account</a>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    function handleLogin(event) {
+      event.preventDefault(); // 阻止表单默认提交行为
+      
+      // 获取表单数据
+      const account = document.getElementById('account').value;
+      const password = document.getElementById('password').value;
+      const agree = document.getElementById('agree').checked;
+      
+      // 验证是否同意条款
+      if (!agree) {
+        alert('请同意服务条款和隐私政策');
+        return;
+      }
+      
+      // 这里可以添加登录验证逻辑
+      // 如果验证成功，跳转
+      window.location.href = 'navigation.html';
+    }
+
+    function navigateToNavigation() {
+      // 添加淡出效果
+      document.body.classList.remove('in');
+      document.body.classList.add('fade');
+
+      // 1秒后跳转
+      setTimeout(() => {
+        window.location.href = 'navigation.html';
+      }, 500); // 等待动画完成
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scene Exploration</title>
+  <style>
+    /* 全局样式 */
+    @font-face {
+      font-family: 'MyCustomFont';
+      src: url('./assets/fonts/AnonymousPro-Regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    body, html {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-image: url('./assets/images/background17.png'); /* 单一背景 */
+      background-size: cover;
+      background-position: center;
+      font-family: 'MyCustomFont', 'Microsoft YaHei', sans-serif;
+      overflow: hidden;
+    }
+
+    .close-button,
+    .refresh-button {
+      position: absolute;
+      top: 10px;
+      cursor: pointer;
+      z-index: 2;
+      transition: transform 1s, filter 1s; /* 添加过渡效果 */
+    }
+
+    .close-button {
+      left: 10px;
+    }
+
+    .refresh-button {
+      left: 60px;
+    }
+    .close-button:active,
+    .refresh-button:active {
+      transform: scale(1.3); /* 略微变大 */
+      filter: brightness(0.8); /* 颜色变深 */
+    }
+
+
+     /* 波纹效果 */
+     .ripple {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 50%;
+      transform: scale(0);
+      animation: ripple-animation 0.6s linear;
+      pointer-events: none;
+    }
+
+    @keyframes ripple-animation {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 关闭按钮 -->
+  <div class="close-button" onclick="setTimeout(() => window.location.href='index1.html', 500);">
+      <img src="./assets/images/cancel.png" alt="Close">
+  </div>
+  <!-- 刷新按钮 -->
+  <div class="refresh-button" onclick="setTimeout(() => window.history.back(), 500);">
+      <img src="./assets/images/return.png" alt="Refresh">
+  </div>
+
+  <div class="memorybox">
+      <img src="./assets/images/memorybox.png" alt="Close">
+  </div>
+
+  <script>
+      // 添加波纹效果的函数
+      function createRipple(event) {
+        const button = event.currentTarget;
+        const ripple = document.createElement('span');
+        ripple.classList.add('ripple');
+
+        // 计算波纹位置
+        const rect = button.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        ripple.style.width = ripple.style.height = `${size}px`;
+        ripple.style.left = `${event.clientX - rect.left - size / 2}px`;
+        ripple.style.top = `${event.clientY - rect.top - size / 2}px`;
+
+        // 添加到按钮内
+        button.appendChild(ripple);
+
+        // 动画结束后移除波纹
+        ripple.addEventListener('animationend', () => ripple.remove());
+      }
+
+      // 为按钮绑定波纹效果
+      document.querySelectorAll('.interaction-point, .close-button, .refresh-button').forEach(button => {
+        button.addEventListener('click', createRipple);
+      });
+
+      // 动态添加动画效果
+      // 为每个按钮绑定点击事件
+      document.querySelectorAll('.interaction-point').forEach(button => {
+      button.addEventListener('click', function () {
+          this.classList.toggle('expanded'); // 切换类名
+      });
+      });
+
+
+  </script>
+</body>
+</html>

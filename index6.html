@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Function Selection</title>
+  <!-- 引入 Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+     /* 全局样式 */
+    @font-face {
+      font-family: 'MyCustomFont';
+      src: url('./assets/fonts/AnonymousPro-Regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    body, html {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-image: url('./assets/images/background11.png');
+      background-size: cover;
+      background-position: center;
+      font-family: 'MyCustomFont', 'Microsoft YaHei', sans-serif;
+    }
+   
+    .close-button,
+    .refresh-button {
+      position: absolute;
+      top: 10px;
+      cursor: pointer;
+      z-index: 2;
+      transition: transform 1s, filter 1s; /* 添加过渡效果 */
+    }
+
+    .close-button {
+      left: 10px;
+    }
+
+    .refresh-button {
+      left: 60px;
+    }
+    .close-button:active,
+    .refresh-button:active {
+      transform: scale(1.3); /* 略微变大 */
+      filter: brightness(0.8); /* 颜色变深 */
+    }
+
+
+    .carousel-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      height: 400px;
+    }
+
+    .box {
+      width: 207px;
+      height: 333px;
+      background-size: contain;
+      background-position: center;
+      text-align: center;
+      line-height: 300px;
+      border-radius: 10px;
+      position: absolute;
+      transition: transform 0.5s ease, opacity 0.5s ease;
+      overflow: hidden; /* 必须隐藏溢出，确保波纹效果不超出按钮 */
+      border-radius: 0;
+    }
+
+    /* 中间的盒子样式 */
+    .box.active {
+      transform: translateX(0) scale(1);
+      opacity: 1;
+      z-index: 2;
+    }
+
+    /* 左侧的盒子样式 */
+    .box.left {
+    transform: translateX(-150px) scale(0.6); /* 将原来的 -250px 改为 -150px */
+    opacity: 0.6;
+    z-index: 1;
+    }
+
+    /* 右侧的盒子样式 */
+    .box.right {
+    transform: translateX(150px) scale(0.6); /* 将原来的 250px 改为 150px */
+    opacity: 0.6;
+    z-index: 1;
+    }
+
+    /* 控制按钮 */
+    .control-button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      font-size: 2rem;
+      cursor: pointer;
+      z-index: 3;
+    }
+
+    .control-button.prev {
+      left: -200px; /* 按钮移动到左侧边缘 */
+    }
+
+    .control-button.next {
+      right: -200px; /* 按钮移动到右侧边缘 */
+    }
+
+     /* 波纹效果 */
+     .ripple {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 50%;
+      transform: scale(0);
+      animation: ripple-animation 0.6s linear;
+      pointer-events: none;
+    }
+
+    @keyframes ripple-animation {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 关闭按钮 -->
+  <div class="close-button" onclick="setTimeout(() => window.location.href='index1.html', 500);">
+    <img src="./assets/images/cancel.png" alt="Close">
+  </div>
+
+  <!-- 刷新按钮 -->
+  <div class="refresh-button" onclick="setTimeout(() => window.history.back(), 500);">
+    <img src="./assets/images/return.png" alt="Refresh">
+  </div>
+
+  <div class="carousel-container">
+    <button class="control-button prev">
+        <img src="./assets/images/left.png" alt="Previous">
+    </button>
+
+    <div class="box active" onclick="setTimeout(() => window.location.href='index7.html', 500);">
+        <img src="./assets/images/function1.png" alt="Space-time recurrence" style="width: 100%; height: 100%; object-fit: cover;">
+    </div>
+    <div class="box right" onclick="setTimeout(() => window.location.href='index10.html', 500);">
+        <img src="./assets/images/function3.png" alt="Interactive commentary" style="width: 100%; height: 100%; object-fit: cover;">
+    </div>
+    <div class="box left" onclick="setTimeout(() => window.location.href='chat.html', 500);">
+        <img src="./assets/images/function2.png" alt="AI dialogue" style="width: 100%; height: 100%; object-fit: cover;">
+    </div>
+    
+    <button class="control-button next">
+        <img src="./assets/images/right.png" alt="Next">
+    </button>
+  </div>
+
+  <div class="description-container">
+    <p class="description-text"></p>
+  </div>
+
+  <!-- 引入 Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const boxes = document.querySelectorAll('.box');
+    const prevButton = document.querySelector('.control-button.prev');
+    const nextButton = document.querySelector('.control-button.next');
+
+    // 初始化索引
+    let activeIndex = 0;
+
+    // 更新盒子位置
+    function updateBoxes() {
+      boxes.forEach((box, index) => {
+        box.classList.remove('active', 'left', 'right');
+        if (index === activeIndex) {
+          box.classList.add('active');
+        } else if (index === (activeIndex - 1 + boxes.length) % boxes.length) {
+          box.classList.add('left');
+        } else {
+          box.classList.add('right');
+        }
+      });
+    }
+
+    // 下一步
+    nextButton.addEventListener('click', () => {
+      activeIndex = (activeIndex + 1) % boxes.length;
+      updateBoxes();
+    });
+
+    // 上一步
+    prevButton.addEventListener('click', () => {
+      activeIndex = (activeIndex - 1 + boxes.length) % boxes.length;
+      updateBoxes();
+    });
+
+    // 初始化
+    updateBoxes();
+    
+
+    // 添加波纹效果的函数
+    function createRipple(event) {
+      const button = event.currentTarget;
+      const ripple = document.createElement('span');
+      ripple.classList.add('ripple');
+
+      // 计算波纹位置
+      const rect = button.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      ripple.style.width = ripple.style.height = `${size}px`;
+      ripple.style.left = `${event.clientX - rect.left - size / 2}px`;
+      ripple.style.top = `${event.clientY - rect.top - size / 2}px`;
+
+      // 添加到按钮内
+      button.appendChild(ripple);
+
+      // 动画结束后移除波纹
+      ripple.addEventListener('animationend', () => ripple.remove());
+    }
+
+    // 为按钮绑定波纹效果
+    document.querySelectorAll('.close-button, .refresh-button,.box active,.box left,.box right').forEach(button => {
+      button.addEventListener('click', createRipple);
+    });
+
+    // 动态添加动画效果
+    // 为每个按钮绑定点击事件
+    document.querySelectorAll('.close-button, .refresh-button, .box').forEach(button => {
+  button.addEventListener('click', createRipple);
+  });
+
+  </script>
+</body>
+</html>
+
+
+

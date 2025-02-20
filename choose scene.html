@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Grid Navigation</title>
+  <style>
+    /* 全局样式 */
+    @font-face {
+      font-family: 'MyCustomFont';
+      src: url('./assets/fonts/AnonymousPro-Regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    body, html {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-image: url('./assets/images/background12.png'); /* 背景图片 */
+      background-size: cover;
+      background-position: center;
+      font-family: 'MyCustomFont', 'Microsoft YaHei', sans-serif;
+      overflow: hidden;
+    }
+
+    .close-button,
+    .refresh-button {
+      position: absolute;
+      top: 10px;
+      cursor: pointer;
+      z-index: 2;
+      transition: transform 1s, filter 1s; /* 添加过渡效果 */
+    }
+
+    .close-button {
+      left: 10px;
+    }
+
+    .refresh-button {
+      left: 60px;
+    }
+    .close-button:active,
+    .refresh-button:active {
+      transform: scale(1.3); /* 略微变大 */
+      filter: brightness(0.8); /* 颜色变深 */
+    }
+
+
+    .container {
+      position: relative;
+      width: 300vw;
+      height: 300vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .grid {
+      position: absolute;
+      display: grid;
+      grid-template-columns: repeat(3, 150px);
+      grid-template-rows: repeat(3, 200px);
+      gap: 0px;
+      transition: transform 0.5s ease;
+    }
+
+    .cell {
+      width: 91.25px;
+      height: 134.25px;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 14px;
+      font-weight: bold;
+      border-radius: 0px;
+      transition: transform 0.5s ease, opacity 0.5s ease, translate 0.5s ease;
+      translate: 0 0;
+    }
+
+    .cell.center {
+      transform: scale(4);
+      opacity: 1;
+      z-index: 10;
+    }
+
+    .cell.adjacent {
+      opacity: 0.7;
+    }
+
+    .cell.distant {
+      opacity: 0.5;
+    }
+
+    /* 控制按钮 */
+    .controls button {
+      border: none;
+      background: none;
+      padding: 10px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    /* 上按钮 */
+    #up {
+      position: absolute;
+      top: 110px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    /* 下按钮 */
+    #down {
+      position: absolute;
+      bottom: 110px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    /* 左按钮 */
+    #left {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    /* 右按钮 */
+    #right {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+     /* 波纹效果 */
+     .ripple {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 50%;
+      transform: scale(0);
+      animation: ripple-animation 0.6s linear;
+      pointer-events: none;
+    }
+
+    @keyframes ripple-animation {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 关闭按钮 -->
+  <div class="close-button" onclick="setTimeout(() => window.location.href='index1.html', 500);">
+    <img src="./assets/images/cancel.png" alt="Close">
+ </div>
+  <!-- 刷新按钮 -->
+  <div class="refresh-button" onclick="setTimeout(() => window.history.back(), 500);">
+    <img src="./assets/images/return.png" alt="Refresh">
+  </div>
+
+
+  <!-- 网格容器 -->
+  <div class="container">
+    <div class="grid" id="grid">
+      <!-- Cells will be dynamically generated -->
+    </div>
+  </div>
+
+  <!-- 上按钮 -->
+  <button id="up" style="border: none; box-shadow: none; background: none;">
+    <img src="./assets/images/up.png" alt="Up">
+  </button>
+
+  <!-- 下按钮 -->
+  <button id="down" style="border: none; box-shadow: none; background: none;">
+    <img src="./assets/images/down.png" alt="Down">
+  </button>
+
+  <!-- 左按钮 -->
+  <button id="left" style="border: none; box-shadow: none; background: none;">
+    <img src="./assets/images/left.png" alt="Left">
+  </button>
+
+  <!-- 右按钮 -->
+  <button id="right" style="border: none; box-shadow: none; background: none;">
+    <img src="./assets/images/right.png" alt="Right">
+  </button>
+
+  <!-- 在网格容器下面添加用于显示文字的 div -->
+  <div id="info" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); color: white; font-size: 20px; font-weight: bold; background-color: rgba(0, 0, 0, 0.5); padding: 10px; border-radius: 5px; display: none;">
+    Julu Road, Shanghai
+  </div>
+
+  <script>
+    // 添加波纹效果的函数
+    function createRipple(event) {
+      const button = event.currentTarget;
+      const ripple = document.createElement('span');
+      ripple.classList.add('ripple');
+  
+      // 计算波纹位置
+      const rect = button.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      ripple.style.width = ripple.style.height = `${size}px`;
+      ripple.style.left = `${event.clientX - rect.left - size / 2}px`;
+      ripple.style.top = `${event.clientY - rect.top - size / 2}px`;
+  
+      // 添加到按钮内
+      button.appendChild(ripple);
+  
+      // 动画结束后移除波纹
+      ripple.addEventListener('animationend', () => ripple.remove());
+    }
+  
+    // 为按钮绑定波纹效果
+    document.querySelectorAll('.enter-button, .close-button, .refresh-button').forEach(button => {
+      button.addEventListener('click', createRipple);
+    });
+  
+    // 动态添加动画效果
+    // 为每个按钮绑定点击事件
+    document.querySelectorAll('.enter-button').forEach(button => {
+      button.addEventListener('click', function () {
+        this.classList.toggle('expanded'); // 切换类名
+      });
+    });
+  
+    const grid = document.getElementById('grid');
+    const info = document.createElement('div'); // 动态创建文字显示区域
+    info.id = 'info';
+    info.style.position = 'absolute';
+    info.style.bottom = '40px';
+    info.style.left = '50%';
+    info.style.transform = 'translateX(-50%)';
+    info.style.padding = '0px 0px';
+    info.style.backgroundColor = 'rgba(0, 0, 0, 0)';
+    info.style.color = 'white';
+    info.style.borderRadius = '0px';
+    info.style.fontSize = '16px';
+    info.style.display = 'none'; // 初始隐藏
+    document.body.appendChild(info);
+  
+    const locations = ['Julu Road, Shanghai', 'Zhejiang University, Hangzhou']; // 随机文字内容
+    const rows = 3;
+    const cols = 3;
+    let centerRow = 1;
+    let centerCol = 1;
+  
+    // Create grid cells
+    function createGrid() {
+      grid.innerHTML = '';
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const cell = document.createElement('div');
+          cell.className = 'cell';
+          cell.dataset.row = r;
+          cell.dataset.col = c;
+  
+          // 设置背景图片
+          const imagePath = `./assets/images/cells/cell-${r}-${c}.png`;
+          cell.style.backgroundImage = `url('${imagePath}')`;
+          cell.style.backgroundSize = 'cover';
+          cell.style.backgroundPosition = 'center';
+  
+          grid.appendChild(cell);
+        }
+      }
+      updateGrid();
+    }
+  
+    // Update grid cell classes
+    function updateGrid() {
+      document.querySelectorAll('.cell').forEach(cell => {
+        const row = parseInt(cell.dataset.row);
+        const col = parseInt(cell.dataset.col);
+  
+        if (row === centerRow && col === centerCol) {
+          // 当前中心 cell
+          cell.className = 'cell center';
+          cell.style.filter = 'none'; // 保持彩色
+        } else {
+          // 非中心 cell
+          cell.className = 'cell distant';
+          cell.style.filter = 'grayscale(100%)'; // 黑白效果
+        }
+      });
+  
+      // Center the grid based on the active cell
+      const xOffset = (centerCol - 1) * -150; // 150px cell width
+      const yOffset = (centerRow - 1) * -200; // 200px cell height
+      grid.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+  
+      // 更新文字显示内容
+      showInfo();
+    }
+  
+    // 显示当前选中 cell 的信息
+    function showInfo() {
+      info.style.display = 'block'; // 显示文字内容
+      const randomIndex = Math.floor(Math.random() * locations.length); // 随机选择内容
+      info.textContent = locations[randomIndex]; // 设置随机文字内容
+    }
+  
+    // Move center position
+    function moveCenter(direction) {
+      if (direction === 'up' && centerRow > 0) centerRow--;
+      if (direction === 'down' && centerRow < rows - 1) centerRow++;
+      if (direction === 'left' && centerCol > 0) centerCol--;
+      if (direction === 'right' && centerCol < cols - 1) centerCol++;
+      updateGrid();
+    }
+  
+    // Event listeners
+    document.getElementById('up').addEventListener('click', () => moveCenter('up'));
+    document.getElementById('down').addEventListener('click', () => moveCenter('down'));
+    document.getElementById('left').addEventListener('click', () => moveCenter('left'));
+    document.getElementById('right').addEventListener('click', () => moveCenter('right'));
+  
+    // Initialize
+    createGrid();
+
+    // 为每个 cell 添加点击事件
+    document.querySelectorAll('.cell').forEach(cell => {
+      cell.addEventListener('click', () => {
+        sessionStorage.setItem('fromChooseScene', 'true'); // 设置标记
+        setTimeout(() => {
+          window.location.href = 'scene1.html'; // 跳转到 scene1.html
+        }, 500); // 0.5秒后跳转
+      });
+    });
+  </script>
+  
+  
+  
+</body>
+</html>
